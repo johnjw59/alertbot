@@ -1,0 +1,17 @@
+{
+  "name": "alert-bot",
+  "version": "1.0.0",
+  "description": "Send generic alerts to a discord server.",
+  "main": "app.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnjw59/alert-bot.git"
+  },
+  "author": "John Wiebe",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/johnjw59/alert-bot/issues"
+  },
+  "homepage": "https://github.com/johnjw59/alert-bot#readme"
+}
