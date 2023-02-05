@@ -1,6 +1,8 @@
 'use strict';
 
 require('dotenv').config();
+const glob = require('glob');
+const path = require('path');
 const { WebhookClient } = require('discord.js');
 const alertEvents = require('./lib/AlertEvents');
 
@@ -11,4 +13,9 @@ alertEvents.onAlert((message) => {
   webhookClient.send({
     content: message,
   });
+});
+
+// Load all the alert plugins from the "alerts" directory.
+glob.sync('./alerts/*').forEach((file) => {
+  require(path.resolve(file));
 });

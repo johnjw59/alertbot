@@ -16,6 +16,7 @@
   "homepage": "https://github.com/johnjw59/alert-bot#readme",
   "dependencies": {
     "discord.js": "^14.7.1",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "glob": "^8.1.0"
   }
 }
