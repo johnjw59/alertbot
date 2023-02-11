@@ -5,6 +5,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const moment = require('moment');
 const schedule = require('node-schedule');
+const store = require('store2');
 
 function GasWizard() {
   // Daily at 6:30am.
@@ -22,24 +23,28 @@ function GasWizard() {
           if ($el.text().indexOf('Vancouver') !== -1) {
             // Price for regular is the first price element.
             const $price_elem = $($('.gwgp-price', $el.parent())[0]);
-            let change = $('.price-direction', $price_elem).text();
+            const change = $('.price-direction', $price_elem).text();
 
             // If there's a change, send a message about it.
             if (change != 'n/c') {
-              const direction = $('.price-direction', $price_elem).hasClass('pd-down') ? 'decreasing' : 'increasing';
-              change = change.substring(2);
+              const data = {
+                price: $price_elem.contents()[0].nodeValue.trim(),
+                date: parseInt(moment(
+                  $('.price-date').text().substring(21),
+                  'dddd Do of MMMM YYYY'
+                ).format('X')),
+              };
 
-              // Get the date and the predicted price.
-              const price = $price_elem.contents()[0].nodeValue.trim();
-              const date = moment(
-                $('.price-date').text().substring(21),
-                'dddd Do of MMMM YYYY'
-              ).format('LL');
+              // Keep track of our data.
+              const old_data = store.get('gaswizard.latest', { date: -1 });
+              store.set('gaswizard.latest', data);
 
-              // @TODO : remember this date (and price?) so we don't send duplicate notifications.
-
-              // Send the message
-              alertEvents.emitAlert(`Gas price is ${direction} to ${price}/L on ${date}`);
+              // Send the alert!
+              // But make sure we're looking at a new date. If we've seen this
+              // date before, only continue if the price has changed.
+              if ((data.date > old_data.date) || ((data.date == old_data.date) && (data.price != old_data.price))) {
+                alertEvents.emitAlert(`Gas prediction for ${moment(data.date, 'X').format('LL')}: (${change}) ${data.price}/L`);
+              }
             }
           }
         });
