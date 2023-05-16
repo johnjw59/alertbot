@@ -34,7 +34,7 @@ function GasWizard() {
                   'dddd Do of MMMM YYYY'
                 ).format('X')),
               };
-              change = parseInt(change.substring(2));
+              change = parseInt(change.substring(1, change.length - 1));
 
               // Keep track of our data.
               const old_data = store.get('gaswizard.latest', { date: -1 });
