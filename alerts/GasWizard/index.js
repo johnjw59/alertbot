@@ -8,8 +8,8 @@ const schedule = require('node-schedule');
 const store = require('store2');
 
 function GasWizard() {
-  // Daily at 6:30am.
-  const schedule_rule = '0 30 6 * * *';
+  // Daily at 12:00pm.
+  const schedule_rule = '0 30 10 * * *';
 
   const job = schedule.scheduleJob(schedule_rule, () => {
     axios.get('https://gaswizard.ca/gas-price-predictions/')
